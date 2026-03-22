@@ -1,91 +1,263 @@
-# My First ETL Project
+# 🚀 Мой Первый ETL Проект
 
-A cryptocurrency ETL pipeline built with Apache Airflow, PostgreSQL, and Python.
+<div align="center">
 
-## Overview
+**Полнофункциональный ETL-конвейер для анализа криптовалютных данных**
 
-This project demonstrates a complete ETL (Extract, Transform, Load) pipeline for cryptocurrency data:
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)
+![Airflow](https://img.shields.io/badge/Airflow-2.9.1-017CEE?logo=apache-airflow&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 
-- **Extract**: Fetches real-time cryptocurrency prices from CoinGecko API
-- **Transform**: Processes raw JSON data into structured format
-- **Load**: Stores data in PostgreSQL database with bronze (raw) and gold (processed) layers
-- **Analytics**: Calculates metrics and performs pandas-based analysis
+</div>
 
-## Architecture
+---
 
-- **Airflow**: Orchestrates the ETL pipeline with scheduled runs every 12 hours
-- **PostgreSQL**: Stores raw data, processed prices, metrics, and analytics results
-- **Docker**: Containerized environment for easy deployment
+## 📋 Описание
 
-## Database Schema
+Этот проект демонстрирует полный цикл ETL-конвейера (Extract → Transform → Load) для работы с данными о криптовалютах:
 
-- `raw_crypto_data`: Raw JSON from API
-- `crypto_prices`: Processed price data
-- `crypto_metrics`: Aggregated statistics per coin
-- `crypto_analytics`: Pandas-calculated metrics (returns, moving averages, volatility)
+- ⬇️ **Извлечение (Extract)** - получение реальных цен криптовалют из API CoinGecko
+- 🔄 **Трансформация (Transform)** - обработка сырых данных в структурированный формат
+- 💾 **Загрузка (Load)** - сохранение данных в PostgreSQL с разделением на слои (raw & gold)
+- 📊 **Аналитика** - расчет метрик и анализ с использованием Pandas
 
-## Setup
+---
 
-1. **Prerequisites**:
-   - Docker and Docker Compose
-   - Git
-
-2. **Clone and run**:
-   ```bash
-   git clone <your-repo-url>
-   cd my-first-ETL
-   docker-compose up -d
-   ```
-
-3. **Access services**:
-   - Airflow UI: http://localhost:8080 (admin/admin)
-   - pgAdmin: http://localhost:5050 (admin@admin.com / admin)
-   - PostgreSQL: localhost:5432 (postgres/postgres)
-
-## Usage
-
-1. Enable the DAG `crypto_etl_pipeline` in Airflow UI
-2. Trigger manual run or wait for scheduled execution (every 12 hours)
-3. Monitor task execution and view logs
-4. Check results in pgAdmin or connect to database
-
-## Project Structure
+## 🏗️ Архитектура
 
 ```
-.
-├── dags/
-│   └── crypto_etl_dag.py      # Airflow DAG definition
-├── db/
-│   └── init.sql               # Database schema
-├── etl/
-│   ├── main.py                # ETL functions
-│   ├── analytics.py           # Analytics functions
-│   ├── requirements.txt       # Python dependencies
-│   └── Dockerfile             # ETL container
-├── docker-compose.yml         # Services configuration
-├── .env                       # Environment variables
-└── README.md                  # This file
+┌─────────────────┐
+│   CoinGecko     │
+│      API        │
+└────────┬────────┘
+         │
+    (EXTRACT)
+         │
+    ┌────▼─────┐
+    │ Airflow  │ ◄── Оркестрация
+    │   DAG    │
+    └────┬─────┘
+         │
+  ┌──────┼──────┐
+  │      │      │
+(LOAD) (LOAD) (LOAD)
+  │      │      │
+  ▼      ▼      ▼
+┌─────────────────────────────────┐
+│      PostgreSQL Database        │
+├─────────────────────────────────┤
+│ • raw_crypto_data     (Bronze)  │
+│ • crypto_prices       (Gold)    │
+│ • crypto_metrics      (Metrics) │
+│ • crypto_analytics    (Analytics)│
+└─────────────────────────────────┘
 ```
 
-## Technologies Used
+### Компоненты
 
-- Python 3.11
-- Apache Airflow 2.9.1
-- PostgreSQL 15
-- SQLAlchemy
-- Pandas
-- Requests
-- Docker & Docker Compose
+- **🌐 Airflow** - оркестрирует конвейер, запускает задачи каждые 12 часов
+- **🗄️ PostgreSQL** - хранит все данные (raw, processed, metrics, analytics)
+- **🐳 Docker** - контейнеризированная среда для простого развертывания
+- **📊 pgAdmin** - веб-интерфейс для управления БД
 
-## Features
+---
 
-- Type hints for better code readability
-- Comprehensive logging
-- Error handling and retries
-- Health checks for database connectivity
-- Modular architecture
-- Containerized deployment
+## 📊 Схема Базы Данных
 
-## Contributing
+| Таблица | Описание |
+|---------|---------|
+| `raw_crypto_data` | Сырые JSON-данные из API |
+| `crypto_prices` | Обработанные данные о цены |
+| `crypto_metrics` | Агрегированные метрики (avg, min, max) |
+| `crypto_analytics` | Рассчитанные показатели (returns, MA, volatility) |
 
-Feel free to open issues or submit pull requests!
+---
+
+## 🛠️ Установка и Запуск
+
+### Требования
+
+- ✅ Docker и Docker Compose (установите [отсюда](https://docs.docker.com/get-docker/))
+- ✅ Git
+- ✅ Понимание основ Python
+
+### Быстрый старт
+
+```bash
+# 1️⃣ Клонируйте репозиторий
+git clone https://github.com/YOUR_USERNAME/my-first-ETL.git
+cd my-first-ETL
+
+# 2️⃣ Запустите все сервисы
+docker-compose up -d
+
+# 3️⃣ Проверьте статус контейнеров
+docker-compose ps
+```
+
+### 📍 Доступ к Сервисам
+
+| Сервис | URL | Логин | Пароль |
+|--------|-----|-------|--------|
+| **Airflow UI** | http://localhost:8080 | airflow | airflow |
+| **pgAdmin** | http://localhost:5050 | admin@admin.com | admin |
+| **PostgreSQL** | localhost:5432 | postgres | postgres |
+
+---
+
+## 🚀 Использование
+
+### Включение DAG в Airflow
+
+1. Откройте http://localhost:8080
+2. Найдите DAG `crypto_etl_pipeline`
+3. Включите его (переключите toggle в ON)
+4. Нажмите **Trigger DAG** для ручного запуска или ждите автоматического запуска (каждые 12 часов)
+
+### Мониторинг выполнения
+
+- 📝 Смотрите логи задач прямо в UI Airflow
+- 📊 Проверяйте результаты в pgAdmin
+- 🔍 Используйте SQL запросы для анализа данных
+
+---
+
+## 📁 Структура Проекта
+
+```
+my-first-ETL/
+├── 📂 dags/
+│   └── crypto_etl_dag.py           # Определение DAG для Airflow
+├── 📂 db/
+│   └── init.sql                    # SQL скрипт инициализации БД
+├── 📂 etl/
+│   ├── main.py                     # Основные функции ETL
+│   ├── analytics.py                # Функции аналитики
+│   ├── requirements.txt            # Python зависимости
+│   └── Dockerfile                  # Docker образ для ETL контейнера
+├── 📂 logs/                        # Логи Airflow
+├── 📂 plugins/                     # Плагины Airflow
+├── 📄 docker-compose.yml           # Настройка всех сервисов
+├── 📄 .env                         # Переменные окружения
+├── 📄 .gitignore                   # Файлы для исключения из Git
+└── 📄 README.md                    # Этот файл
+```
+
+---
+
+## 🛠️ Технологии
+
+<table>
+  <tr>
+    <td align="center"><img src="https://img.shields.io/badge/Python-3.11-3776ab?logo=python&logoColor=white"/></td>
+    <td align="center"><img src="https://img.shields.io/badge/Apache_Airflow-2.9.1-017CEE?logo=apache-airflow&logoColor=white"/></td>
+    <td align="center"><img src="https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql&logoColor=white"/></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white"/></td>
+    <td align="center"><img src="https://img.shields.io/badge/SQLAlchemy-ORM-red?logoColor=white"/></td>
+    <td align="center"><img src="https://img.shields.io/badge/Pandas-Data_Analysis-150458?logo=pandas&logoColor=white"/></td>
+  </tr>
+</table>
+
+---
+
+## ✨ Особенности
+
+- ✅ **Type Hints** - полная типизация для лучшей читаемости кода
+- ✅ **Логирование** - детальные логи на каждом этапе
+- ✅ **Обработка ошибок** - retry механизм и graceful error handling
+- ✅ **Health Checks** - проверка доступности БД перед началом
+- ✅ **Модульная архитектура** - чистый, переиспользуемый код
+- ✅ **Docker Ready** - полностью контейнеризировано
+- ✅ **Airflow Интеграция** - профессиональная оркестрация
+
+---
+
+## 🔧 Команды Docker
+
+```bash
+# Запуск всех сервисов
+docker-compose up -d
+
+# Остановка сервисов
+docker-compose down
+
+# Просмотр логов
+docker-compose logs -f airflow-webserver
+
+# Перезапуск конкретного сервиса
+docker-compose restart postgres
+
+# Проверка статуса
+docker-compose ps
+```
+
+---
+
+## 📈 Примеры SQL Запросов
+
+### Получить последнюю цену каждой криптовалюты
+
+```sql
+SELECT coin, price_usd, loaded_at 
+FROM crypto_prices 
+ORDER BY loaded_at DESC 
+LIMIT 15;
+```
+
+### Статистика по цены
+
+```sql
+SELECT * FROM crypto_metrics 
+ORDER BY avg_price DESC;
+```
+
+### Анализ волатильности
+
+```sql
+SELECT coin, volatility_7, volatility_30 
+FROM crypto_analytics 
+WHERE loaded_at >= NOW() - INTERVAL '7 days'
+ORDER BY volatility_30 DESC;
+```
+
+---
+
+## 🎯 Что Дальше?
+
+Идеи для расширения проекта:
+
+- 📧 Добавить уведомления по email при обновлении данных
+- 📱 Реализовать API для доступа к данным
+- 📊 Добавить визуализацию с помощью Grafana/Plotly
+- 🔐 Настроить авторизацию и права доступа
+- 🌍 Расширить список криптовалют и источников данных
+- ⚡ Оптимизировать производительность для больших объемов
+
+---
+
+## 🤝 Контрибьютинг
+
+Приветствуются pull requests! Для больших изменений сначала откройте issue для обсуждения.
+
+---
+
+## 📝 Лицензия
+
+MIT License - см. файл LICENSE для деталей
+
+---
+
+## 👨‍💻 Автор
+
+Создано с ❤️ для изучения ETL и Airflow
+
+---
+
+<div align="center">
+
+**Сделано с ❤️ | Звёзды приветствуются ⭐**
+
+</div>
